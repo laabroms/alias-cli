@@ -5,7 +5,7 @@
   "type": "module",
   "main": "dist/cli.js",
   "bin": {
-    "alias-cli": "./dist/cli.js"
+    "alias-cli": "dist/cli.js"
   },
   "files": [
     "dist"
@@ -30,7 +30,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/laabroms/alias-cli.git"
+    "url": "git+https://github.com/laabroms/alias-cli.git"
   },
   "bugs": {
     "url": "https://github.com/laabroms/alias-cli/issues"
