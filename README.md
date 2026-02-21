@@ -77,8 +77,11 @@ Create a quick commit alias:
 3. **Name:** `gc`
 4. **Command:** `git add . && git commit -m`
 5. Press `Enter` to save
-6. Reload shell: `source ~/.zshrc`
-7. Use it: `gc "feat: add new feature"`
+6. Press `q` to quit
+7. Run the printed command to reload: `source ~/.zshrc`
+8. Use it: `gc "feat: add new feature"`
+
+**Optional:** Set up [auto-reload](SETUP.md) so step 7 happens automatically!
 
 ## How It Works
 
@@ -95,6 +98,12 @@ alias gs="git status"
 alias gc="git add . && git commit -m"
 alias gp="git push origin main"
 ```
+
+### Auto-Reload (Optional)
+
+For automatic alias reloading when you quit, see [SETUP.md](SETUP.md) for a simple one-time shell function setup.
+
+Without setup, you'll need to manually run the printed `source` command after making changes.
 
 ## Requirements
 

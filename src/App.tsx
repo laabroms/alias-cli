@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Text, useInput, useApp } from 'ink';
+import fs from 'fs';
+import path from 'path';
+import os from 'os';
 import { loadAliases, saveAliases, type Alias, getShellConfigPath } from './aliases.js';
 import { Logo } from './components/Logo.js';
 import { LogoCompact } from './components/LogoCompact.js';
@@ -47,14 +50,26 @@ export function App() {
     } else if (input === 'q') {
       if (hasChanges) {
         const configPath = getShellConfigPath();
-        console.log('\n');
-        console.log('✨ Changes saved!');
-        console.log('');
-        console.log('To apply your new aliases, run:');
-        console.log(`  \x1b[36msource ${configPath}\x1b[0m`);
-        console.log('');
+        const reloadFile = path.join(os.homedir(), '.alias-cli-reload');
+        const fileName = configPath.replace(os.homedir(), '~');
+        
+        // Write reload marker for wrapper function
+        try {
+          fs.writeFileSync(reloadFile, configPath, 'utf-8');
+        } catch (e) {
+          // Ignore write errors
+        }
+        
+        exit();
+        
+        // Print reload instructions
+        console.log('\n\x1b[32m✨ Changes saved!\x1b[0m\n');
+        console.log('\x1b[33mTo apply your aliases:\x1b[0m\n');
+        console.log(`  \x1b[36;1msource ${fileName}\x1b[0m\n`);
+        console.log('\x1b[2m💡 Tip: For auto-reload on quit, see SETUP.md\x1b[0m\n');
+      } else {
+        exit();
       }
-      exit();
     }
   });
 
