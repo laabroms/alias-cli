@@ -1,5 +1,14 @@
 # Alias CLI
 
+```
+ █████╗ ██╗     ██╗ █████╗ ███████╗
+██╔══██╗██║     ██║██╔══██╗██╔════╝
+███████║██║     ██║███████║███████╗
+██╔══██║██║     ██║██╔══██║╚════██║
+██║  ██║███████╗██║██║  ██║███████║
+╚═╝  ╚═╝╚══════╝╚═╝╚═╝  ╚═╝╚══════╝
+```
+
 > Interactive terminal UI for managing shell aliases
 
 [![npm version](https://img.shields.io/npm/v/@laabroms/alias-cli.svg)](https://www.npmjs.com/package/@laabroms/alias-cli)

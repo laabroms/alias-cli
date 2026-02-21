@@ -88,10 +88,10 @@ export function App() {
         }
 
         console.log("\x1b[33m⚡ Want auto-reload on quit?\x1b[0m");
-        console.log("\x1b[2m  Add this wrapper to your ${fileName}:\x1b[0m");
-        console.log("\x1b[2m  alias-cli-reload() { command alias-cli && [ -f ~/.alias-cli-reload ] && source \"$(cat ~/.alias-cli-reload)\" && rm ~/.alias-cli-reload; }\x1b[0m");
-        console.log("\x1b[2m  alias alias-cli='alias-cli-reload'\x1b[0m");
-        console.log("\x1b[2m  Then run: source ${fileName}\x1b[0m\n");
+        console.log(`\x1b[2m  Add this wrapper to your ${fileName}:\x1b[0m`);
+        console.log(`\x1b[2m  alias-cli-reload() { command alias-cli && [ -f ~/.alias-cli-reload ] && source "$(cat ~/.alias-cli-reload)" && rm ~/.alias-cli-reload; }\x1b[0m`);
+        console.log(`\x1b[2m  alias alias-cli='alias-cli-reload'\x1b[0m`);
+        console.log(`\x1b[2m  Then run: source ${fileName}\x1b[0m\n`);
       } else {
         exit();
       }
