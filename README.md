@@ -142,4 +142,4 @@ PRs welcome! Please open an issue first to discuss what you'd like to change.
 
 ## License
 
-MIT © [Lucas Aabroms](https://github.com/laabroms)
+MIT © [Lucas Abroms](https://github.com/laabroms)
