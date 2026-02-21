@@ -5,16 +5,22 @@ import TextInput from 'ink-text-input';
 interface SearchModalProps {
   onSearch: (query: string) => void;
   onCancel: () => void;
+  matchCount?: number;
 }
 
-export function SearchModal({ onSearch, onCancel }: SearchModalProps) {
+export function SearchModal({ onSearch, onCancel, matchCount }: SearchModalProps) {
   const [query, setQuery] = useState('');
+
+  const handleChange = (value: string) => {
+    setQuery(value);
+    onSearch(value); // Filter on every keystroke
+  };
 
   useInput((input, key) => {
     if (key.escape) {
       onCancel();
     } else if (key.return) {
-      onSearch(query);
+      onCancel(); // Just close modal, filter already applied
     }
   });
 
@@ -38,25 +44,25 @@ export function SearchModal({ onSearch, onCancel }: SearchModalProps) {
         >
           <TextInput
             value={query}
-            onChange={setQuery}
+            onChange={handleChange}
             placeholder="Type to filter aliases..."
           />
         </Box>
       </Box>
 
-      <Box marginTop={1}>
-        <Text dimColor>Search by name or command</Text>
-      </Box>
+      {/* Match count */}
+      {query && matchCount !== undefined && (
+        <Box marginTop={1} justifyContent="center">
+          <Text color="cyan">{matchCount}</Text>
+          <Text dimColor> {matchCount === 1 ? 'match' : 'matches'}</Text>
+        </Box>
+      )}
 
       {/* Footer */}
       <Box marginTop={1} justifyContent="center" gap={2}>
         <Text>
-          <Text bold color="green">[Enter]</Text>
-          <Text dimColor> search</Text>
-        </Text>
-        <Text>
-          <Text bold color="gray">[Esc]</Text>
-          <Text dimColor> cancel</Text>
+          <Text bold color="green">[Enter/Esc]</Text>
+          <Text dimColor> close</Text>
         </Text>
       </Box>
     </Box>

@@ -131,9 +131,9 @@ export function App() {
     (query: string) => {
       setSearchQuery(query);
       setSelectedIndex(0);
-      setMode("list");
+      // Keep mode as 'search' to continue showing modal
     },
-    [setSearchQuery, setSelectedIndex, setMode],
+    [setSearchQuery, setSelectedIndex],
   );
 
   const handleClearSearch = useCallback(() => {
@@ -166,6 +166,17 @@ export function App() {
       </Box>
 
       {/* Main Content */}
+      {/* Search Modal (overlay) */}
+      {mode === "search" && (
+        <Box marginBottom={1}>
+          <SearchModal
+            onSearch={handleSearch}
+            onCancel={handleCancel}
+            matchCount={filteredAliases.length}
+          />
+        </Box>
+      )}
+
       <Box
         borderStyle="round"
         borderColor="gray"
@@ -177,6 +188,7 @@ export function App() {
         {(() => {
           switch (mode) {
             case "list":
+            case "search":
               return (
                 <AliasList
                   aliases={filteredAliases}
@@ -201,8 +213,6 @@ export function App() {
                   onCancel={handleCancel}
                 />
               ) : null;
-            case "search":
-              return <SearchModal onSearch={handleSearch} onCancel={handleCancel} />;
             default:
               return null;
           }
