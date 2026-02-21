@@ -13,6 +13,7 @@ Built with [Ink](https://github.com/vadimdemedes/ink) — React for CLIs.
 
 - ✨ **Interactive TUI** — keyboard-driven, no mouse needed
 - 📝 **Add/Edit/Delete** aliases with clean modal dialogs
+- 🔍 **Real-time search** — filter aliases as you type with arrow key navigation
 - 🔍 **Live preview** — see your alias before saving
 - 💾 **Auto-backup** — creates `.zshrc.backup` before changes
 - 🎯 **Visual focus** — clearly see which field you're editing
@@ -20,6 +21,12 @@ Built with [Ink](https://github.com/vadimdemedes/ink) — React for CLIs.
 - 📦 **Zero config** — works with `.zshrc` or `.bashrc` out of the box
 
 ## Installation
+
+### Quick Install (bash)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/laabroms/alias-cli/main/install.sh | bash
+```
 
 ### npm (global)
 
@@ -56,8 +63,16 @@ alias-cli
 - `↑/↓` — Navigate aliases
 - `a` — Add new alias
 - `e` — Edit selected alias
-- `d` — Delete selected alias
+- `d` or `Del` — Delete selected alias
+- `/` — Search/filter aliases
+- `c` — Clear search filter
 - `q` — Quit
+
+**Search Mode:**
+- Type to filter aliases in real-time
+- `↑/↓` — Navigate filtered results
+- `Enter` — Edit selected alias
+- `Esc` — Close search
 
 **Add/Edit Modal:**
 - `Tab` — Switch between Name and Command fields
@@ -140,12 +155,10 @@ npm run typecheck
 
 ## Future Ideas
 
-- [ ] Search/filter aliases (`/` key)
 - [ ] Import/export alias sets
 - [ ] Syntax highlighting for commands
 - [ ] Multi-select delete
 - [ ] Alias categories/tags
-- [ ] Shell reload after save
 - [ ] Support for `.bash_aliases` and other config files
 
 ## Contributing
