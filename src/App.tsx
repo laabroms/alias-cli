@@ -62,25 +62,30 @@ export function App() {
     } else if (input === "q") {
       if (hasChanges) {
         const configPath = getShellConfigPath();
-        const reloadFile = path.join(os.homedir(), ".alias-cli-reload");
         const fileName = configPath.replace(os.homedir(), "~");
-
-        // Write reload marker for wrapper function
-        try {
-          fs.writeFileSync(reloadFile, configPath, "utf-8");
-        } catch (e) {
-          // Ignore write errors
-        }
+        const sourceCommand = `source ${fileName}`;
 
         exit();
 
         // Print reload instructions
         console.log("\n\x1b[32m✨ Changes saved!\x1b[0m\n");
-        console.log("\x1b[33mTo apply your aliases:\x1b[0m\n");
-        console.log(`  \x1b[36;1msource ${fileName}\x1b[0m\n`);
-        console.log(
-          "\x1b[2m💡 Tip: For auto-reload on quit, see SETUP.md\x1b[0m\n",
-        );
+        console.log("\x1b[1mRun this to apply your aliases:\x1b[0m\n");
+        console.log(`  \x1b[36;1m${sourceCommand}\x1b[0m\n`);
+        
+        // Try to copy to clipboard (macOS/Linux)
+        try {
+          const { execSync } = require("child_process");
+          // Try pbcopy (macOS) first, then xclip (Linux)
+          try {
+            execSync(`echo '${sourceCommand}' | pbcopy`, { stdio: "ignore" });
+            console.log("\x1b[2m✓ Copied to clipboard! Just paste and run.\x1b[0m\n");
+          } catch {
+            execSync(`echo '${sourceCommand}' | xclip -selection clipboard`, { stdio: "ignore" });
+            console.log("\x1b[2m✓ Copied to clipboard! Just paste and run.\x1b[0m\n");
+          }
+        } catch {
+          // Clipboard not available
+        }
       } else {
         exit();
       }
