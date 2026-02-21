@@ -14,8 +14,6 @@
 [![npm version](https://img.shields.io/npm/v/@laabroms/alias-cli.svg)](https://www.npmjs.com/package/@laabroms/alias-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Built with [Ink](https://github.com/vadimdemedes/ink) — React for CLIs.
-
 <!-- ![Demo](demo.gif) -->
 
 ## Features
@@ -128,26 +126,6 @@ After making changes, the CLI automatically copies the `source` command to your 
 - Node.js >= 18.0.0
 - Terminal with ANSI color support
 
-## Development
-
-```bash
-# Clone the repo
-git clone https://github.com/laabroms/alias-cli.git
-cd alias-cli
-
-# Install dependencies
-npm install
-
-# Run in dev mode
-npm run dev
-
-# Build for production
-npm run build
-
-# Type check
-npm run typecheck
-```
-
 ## Tech Stack
 
 - **Ink** — React renderer for CLIs
@@ -155,14 +133,6 @@ npm run typecheck
 - **TypeScript** — Type safety
 - **tsup** — Fast bundler
 - **tsx** — TypeScript execution
-
-## Future Ideas
-
-- [ ] Import/export alias sets
-- [ ] Syntax highlighting for commands
-- [ ] Multi-select delete
-- [ ] Alias categories/tags
-- [ ] Support for `.bash_aliases` and other config files
 
 ## Contributing
 
