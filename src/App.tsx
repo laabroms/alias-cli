@@ -51,9 +51,7 @@ export function App() {
     } else if (input === '/') {
       setMode('search');
     } else if (input === 'c' && searchQuery) {
-      // Clear search
-      setSearchQuery('');
-      setSelectedIndex(0);
+      handleClearSearch();
     } else if (input === 'q') {
       if (hasChanges) {
         const configPath = getShellConfigPath();
