@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
 import TextInput from 'ink-text-input';
+import type { Alias } from '../aliases.js';
 
 interface AddAliasModalProps {
   onSave: (name: string, command: string) => void;
   onCancel: () => void;
+  existingAliases: Alias[];
 }
 
-export function AddAliasModal({ onSave, onCancel }: AddAliasModalProps) {
+export function AddAliasModal({ onSave, onCancel, existingAliases }: AddAliasModalProps) {
   const [name, setName] = useState('');
   const [command, setCommand] = useState('');
   const [focusedField, setFocusedField] = useState<'name' | 'command'>('name');
+
+  const isDuplicate = name && existingAliases.some(a => a.name === name);
 
   useInput((input, key) => {
     if (key.tab || key.downArrow) {
@@ -19,7 +23,7 @@ export function AddAliasModal({ onSave, onCancel }: AddAliasModalProps) {
       setFocusedField((prev) => (prev === 'command' ? 'name' : 'command'));
     } else if (key.escape) {
       onCancel();
-    } else if (key.return && name && command) {
+    } else if (key.return && name && command && !isDuplicate) {
       onSave(name, command);
     }
   });
@@ -55,6 +59,11 @@ export function AddAliasModal({ onSave, onCancel }: AddAliasModalProps) {
             </Text>
           )}
         </Box>
+        {isDuplicate && (
+          <Box marginTop={0}>
+            <Text color="red">⚠ Alias '{name}' already exists</Text>
+          </Box>
+        )}
       </Box>
 
       {/* Command Field */}

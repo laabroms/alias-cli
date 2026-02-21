@@ -55,7 +55,12 @@ export function loadAliases(): Alias[] {
   try {
     const configPath = getShellConfigPath();
     const content = fs.readFileSync(configPath, 'utf-8');
-    return parseAliases(content);
+
+    // Parse ALL aliases from the file
+    const allAliases = parseAliases(content);
+
+    // Filter out the alias-cli wrapper (it's a function, not a user alias)
+    return allAliases.filter(a => a.name !== 'alias-cli');
   } catch (error) {
     console.error('Failed to load aliases:', error);
     return [];
@@ -66,33 +71,43 @@ export function saveAliases(aliases: Alias[]): void {
   try {
     const configPath = getShellConfigPath();
     let content = '';
-    
+
     // Read existing content
     if (fs.existsSync(configPath)) {
       content = fs.readFileSync(configPath, 'utf-8');
     }
-    
-    // Remove old alias lines
+
     const lines = content.split('\n');
-    const nonAliasLines = lines.filter((line) => {
+    const MARKER = '# Aliases managed by alias-cli';
+
+    // Remove old alias lines and the marker, but keep the wrapper function
+    const filteredLines = lines.filter((line) => {
       const trimmed = line.trim();
-      return !trimmed.startsWith('alias ');
+      // Keep the wrapper function lines
+      if (trimmed.includes('alias-cli-reload()') ||
+          trimmed.includes('command alias-cli') ||
+          trimmed.includes('~/.alias-cli-reload') ||
+          (trimmed.startsWith('alias alias-cli=') && trimmed.includes('alias-cli-reload'))) {
+        return true;
+      }
+      // Remove old aliases and markers
+      return !trimmed.startsWith('alias ') && trimmed !== MARKER && trimmed !== '# End of alias-cli managed aliases';
     });
-    
+
     // Add new aliases at the end
     const newContent = [
-      ...nonAliasLines,
+      ...filteredLines,
       '',
-      '# Aliases managed by alias-cli',
+      MARKER,
       serializeAliases(aliases),
     ].join('\n');
-    
+
     // Backup original file
     const backupPath = `${configPath}.backup`;
     if (fs.existsSync(configPath)) {
       fs.copyFileSync(configPath, backupPath);
     }
-    
+
     // Write new content
     fs.writeFileSync(configPath, newContent, 'utf-8');
   } catch (error) {

@@ -68,9 +68,9 @@ export function App() {
         exit();
 
         // Print reload instructions
-        console.log("\n\x1b[32m✨ Changes saved!\x1b[0m\n");
-        console.log("\x1b[33m📋 To apply your aliases, run:\x1b[0m");
-        console.log(`  \x1b[36;1m${sourceCommand}\x1b[0m\n`);
+        console.log("\n\x1b[32;1m✨ Changes saved!\x1b[0m\n");
+        console.log("\x1b[2m📋 To apply your aliases:\x1b[0m");
+        console.log(`\x1b[7;36;1m ${sourceCommand} \x1b[0m\n`);
 
         // Try to copy to clipboard (macOS/Linux)
         try {
@@ -78,20 +78,14 @@ export function App() {
           // Try pbcopy (macOS) first, then xclip (Linux)
           try {
             execSync(`echo '${sourceCommand}' | pbcopy`, { stdio: "ignore" });
-            console.log("\x1b[2m✓ Copied to clipboard! Just paste and run.\x1b[0m\n");
+            console.log("\x1b[2;32m✓ Copied to clipboard!\x1b[0m\n");
           } catch {
             execSync(`echo '${sourceCommand}' | xclip -selection clipboard`, { stdio: "ignore" });
-            console.log("\x1b[2m✓ Copied to clipboard! Just paste and run.\x1b[0m\n");
+            console.log("\x1b[2;32m✓ Copied to clipboard!\x1b[0m\n");
           }
         } catch {
           // Clipboard not available
         }
-
-        console.log("\x1b[33m⚡ Want auto-reload on quit?\x1b[0m");
-        console.log(`\x1b[2m  Add this wrapper to your ${fileName}:\x1b[0m`);
-        console.log(`\x1b[2m  alias-cli-reload() { command alias-cli && [ -f ~/.alias-cli-reload ] && source "$(cat ~/.alias-cli-reload)" && rm ~/.alias-cli-reload; }\x1b[0m`);
-        console.log(`\x1b[2m  alias alias-cli='alias-cli-reload'\x1b[0m`);
-        console.log(`\x1b[2m  Then run: source ${fileName}\x1b[0m\n`);
       } else {
         exit();
       }
@@ -226,7 +220,7 @@ export function App() {
                 />
               );
             case "add":
-              return <AddAliasModal onSave={handleAdd} onCancel={handleCancel} />;
+              return <AddAliasModal onSave={handleAdd} onCancel={handleCancel} existingAliases={aliases} />;
             case "edit":
               return filteredAliases[selectedIndex] ? (
                 <EditAliasModal
