@@ -1,6 +1,6 @@
 {
   "name": "@laabroms/alias-cli",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Interactive TUI for managing shell aliases",
   "type": "module",
   "main": "dist/cli.js",
