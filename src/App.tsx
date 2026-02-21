@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Text, useInput } from 'ink';
 import { loadAliases, saveAliases, type Alias } from './aliases.js';
+import { Logo } from './components/Logo.js';
 import { AliasList } from './components/AliasList.js';
 import { AddAliasModal } from './components/AddAliasModal.js';
 import { EditAliasModal } from './components/EditAliasModal.js';
@@ -78,6 +79,9 @@ export function App() {
 
   return (
     <Box flexDirection="column" paddingX={2} paddingY={1}>
+      {/* Logo - only show on main screen */}
+      {mode === 'list' && <Logo />}
+
       {/* Header */}
       <Box justifyContent="space-between" marginBottom={1}>
         <Box gap={1}>
