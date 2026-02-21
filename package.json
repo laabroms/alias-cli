@@ -1,0 +1,29 @@
+{
+  "name": "alias-cli",
+  "version": "1.0.0",
+  "description": "Interactive TUI for managing shell aliases",
+  "type": "module",
+  "main": "src/cli.tsx",
+  "bin": {
+    "alias-cli": "./bin/alias-cli.js"
+  },
+  "scripts": {
+    "dev": "tsx src/cli.tsx",
+    "start": "tsx src/cli.tsx"
+  },
+  "keywords": ["alias", "cli", "tui", "shell", "zsh", "bash"],
+  "author": "Shadow",
+  "license": "MIT",
+  "dependencies": {
+    "ink": "^6.8.0",
+    "ink-select-input": "^6.2.0",
+    "ink-text-input": "^6.0.0",
+    "react": "^19.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.0",
+    "@types/react": "^19.2.14",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
