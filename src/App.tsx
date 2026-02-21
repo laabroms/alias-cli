@@ -104,7 +104,7 @@ export function App() {
             "\x1b[2m⚡ Want aliases to auto-reload when you quit? Run this once:\x1b[0m\n",
           );
           console.log(
-            `\x1b[7;36m echo '\\nalias-cli() { command alias-cli "$@"; ${sourceCommand}; }' >> ${fileName} && ${sourceCommand} \x1b[0m\n`,
+            `\x1b[7;36m echo '\\nalias-cli() { command alias-cli "$@"; unalias -a; ${sourceCommand}; }' >> ${fileName} && ${sourceCommand} \x1b[0m\n`,
           );
         }
       } else {
