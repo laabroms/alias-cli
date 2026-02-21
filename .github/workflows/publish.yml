@@ -68,13 +68,21 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Check if version changed
+      - name: Check if version exists on GitHub Packages
         id: version-check
+        continue-on-error: true
         run: |
           PACKAGE_VERSION=$(node -p "require('./package.json').version")
-          echo "version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
+          if npm view @laabroms/alias-cli@$PACKAGE_VERSION version --registry=https://npm.pkg.github.com 2>/dev/null; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Version $PACKAGE_VERSION already exists on GitHub Packages"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Version $PACKAGE_VERSION is new"
+          fi
 
       - name: Publish to GitHub Packages
+        if: steps.version-check.outputs.exists == 'false'
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
