@@ -5,9 +5,10 @@ import type { Alias } from '../aliases.js';
 interface AliasListProps {
   aliases: Alias[];
   selectedIndex: number;
+  isSearchMode?: boolean;
 }
 
-export function AliasList({ aliases, selectedIndex }: AliasListProps) {
+export function AliasList({ aliases, selectedIndex, isSearchMode }: AliasListProps) {
   if (aliases.length === 0) {
     return (
       <Box
@@ -17,7 +18,11 @@ export function AliasList({ aliases, selectedIndex }: AliasListProps) {
         paddingY={3}
       >
         <Text color="gray">No aliases found</Text>
-        <Text dimColor>Press [a] to create your first alias</Text>
+        {isSearchMode ? (
+          <Text dimColor>Try a different search term or press [Esc] to go back</Text>
+        ) : (
+          <Text dimColor>Press [a] to create your first alias</Text>
+        )}
       </Box>
     );
   }

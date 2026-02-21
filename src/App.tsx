@@ -76,11 +76,13 @@ export function App() {
 
         // Print reload instructions
         console.log("\n\x1b[32m✨ Changes saved!\x1b[0m\n");
-        console.log("\x1b[33mTo apply your aliases:\x1b[0m\n");
+        console.log("\x1b[33m📋 To apply your aliases, run:\x1b[0m");
         console.log(`  \x1b[36;1msource ${fileName}\x1b[0m\n`);
-        console.log(
-          "\x1b[2m💡 Tip: For auto-reload on quit, see SETUP.md\x1b[0m\n",
-        );
+        console.log("\x1b[33m⚡ Want auto-reload on quit?\x1b[0m");
+        console.log("\x1b[2m  Add this wrapper to your ${fileName}:\x1b[0m");
+        console.log("\x1b[2m  alias-cli-reload() { command alias-cli && [ -f ~/.alias-cli-reload ] && source \"$(cat ~/.alias-cli-reload)\" && rm ~/.alias-cli-reload; }\x1b[0m");
+        console.log("\x1b[2m  alias alias-cli='alias-cli-reload'\x1b[0m");
+        console.log("\x1b[2m  Then run: source ${fileName}\x1b[0m\n");
       } else {
         exit();
       }
@@ -141,13 +143,30 @@ export function App() {
     setMode("list");
   }, [setSearchQuery, setMode]);
 
+  const handleNavigate = useCallback(
+    (direction: 'up' | 'down') => {
+      if (direction === 'up') {
+        setSelectedIndex((prev) => Math.max(0, prev - 1));
+      } else {
+        setSelectedIndex((prev) => Math.min(filteredAliases.length - 1, prev + 1));
+      }
+    },
+    [filteredAliases.length]
+  );
+
+  const handleSelectFromSearch = useCallback(() => {
+    if (filteredAliases.length > 0) {
+      setMode("edit");
+    }
+  }, [filteredAliases.length]);
+
   return (
     <Box flexDirection="column" paddingX={2} paddingY={1}>
       {/* Logo - big on main screen, compact in modals */}
       {mode === "list" ? <Logo /> : <LogoCompact />}
 
       {/* Header */}
-      <Box justifyContent="space-between" marginBottom={1}>
+      <Box marginBottom={1}>
         <Box gap={1}>
           <Text bold color="magenta">
             ⚡
@@ -157,7 +176,6 @@ export function App() {
           </Text>
           <Text dimColor>({aliases.length} aliases)</Text>
         </Box>
-        <Text dimColor>[q] quit</Text>
       </Box>
 
       {/* Separator */}
@@ -173,6 +191,8 @@ export function App() {
             onSearch={handleSearch}
             onCancel={handleCancel}
             matchCount={filteredAliases.length}
+            onNavigate={handleNavigate}
+            onSelect={handleSelectFromSearch}
           />
         </Box>
       )}
@@ -193,6 +213,7 @@ export function App() {
                 <AliasList
                   aliases={filteredAliases}
                   selectedIndex={selectedIndex}
+                  isSearchMode={mode === "search"}
                 />
               );
             case "add":
@@ -264,6 +285,13 @@ export function App() {
                 [↑/↓]
               </Text>
               <Text dimColor> navigate</Text>
+            </Text>
+            <Text dimColor>•</Text>
+            <Text>
+              <Text bold color="gray">
+                [q]
+              </Text>
+              <Text dimColor> quit</Text>
             </Text>
           </Box>
           {searchQuery && (

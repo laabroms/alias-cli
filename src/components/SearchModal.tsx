@@ -6,9 +6,11 @@ interface SearchModalProps {
   onSearch: (query: string) => void;
   onCancel: () => void;
   matchCount?: number;
+  onNavigate?: (direction: 'up' | 'down') => void;
+  onSelect?: () => void;
 }
 
-export function SearchModal({ onSearch, onCancel, matchCount }: SearchModalProps) {
+export function SearchModal({ onSearch, onCancel, matchCount, onNavigate, onSelect }: SearchModalProps) {
   const [query, setQuery] = useState('');
 
   const handleChange = (value: string) => {
@@ -20,7 +22,15 @@ export function SearchModal({ onSearch, onCancel, matchCount }: SearchModalProps
     if (key.escape) {
       onCancel();
     } else if (key.return) {
-      onCancel(); // Just close modal, filter already applied
+      if (matchCount && matchCount > 0 && onSelect) {
+        onSelect(); // Open edit view for selected item
+      } else {
+        onCancel(); // Just close modal if no matches
+      }
+    } else if (key.upArrow && onNavigate) {
+      onNavigate('up');
+    } else if (key.downArrow && onNavigate) {
+      onNavigate('down');
     }
   });
 
@@ -61,8 +71,23 @@ export function SearchModal({ onSearch, onCancel, matchCount }: SearchModalProps
       {/* Footer */}
       <Box marginTop={1} justifyContent="center" gap={2}>
         <Text>
-          <Text bold color="green">[Enter/Esc]</Text>
+          <Text bold color="green">[Enter]</Text>
+          <Text dimColor> select</Text>
+        </Text>
+        <Text dimColor>•</Text>
+        <Text>
+          <Text bold color="yellow">[Esc]</Text>
           <Text dimColor> close</Text>
+        </Text>
+        <Text dimColor>•</Text>
+        <Text>
+          <Text bold color="cyan">[↑/↓]</Text>
+          <Text dimColor> navigate</Text>
+        </Text>
+        <Text dimColor>•</Text>
+        <Text>
+          <Text bold color="gray">[q]</Text>
+          <Text dimColor> quit</Text>
         </Text>
       </Box>
     </Box>
