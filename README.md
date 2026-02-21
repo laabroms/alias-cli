@@ -14,7 +14,9 @@
 [![npm version](https://img.shields.io/npm/v/@laabroms/alias-cli.svg)](https://www.npmjs.com/package/@laabroms/alias-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-<!-- ![Demo](demo.gif) -->
+## Demo
+
+![Demo](assets/demo.gif)
 
 ## Features
 
