@@ -1,19 +1,41 @@
 {
-  "name": "alias-cli",
-  "version": "1.0.0",
+  "name": "@laabroms/alias-cli",
+  "version": "0.1.0",
   "description": "Interactive TUI for managing shell aliases",
   "type": "module",
-  "main": "src/cli.tsx",
+  "main": "dist/cli.js",
   "bin": {
-    "alias-cli": "./bin/alias-cli.js"
+    "alias-cli": "./dist/cli.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "tsup",
     "dev": "tsx src/cli.tsx",
-    "start": "tsx src/cli.tsx"
+    "prepublishOnly": "npm run build",
+    "typecheck": "tsc --noEmit"
   },
-  "keywords": ["alias", "cli", "tui", "shell", "zsh", "bash"],
-  "author": "Shadow",
+  "keywords": [
+    "alias",
+    "cli",
+    "tui",
+    "shell",
+    "zsh",
+    "bash",
+    "terminal",
+    "interactive"
+  ],
+  "author": "Lucas Aabroms",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/laabroms/alias-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/laabroms/alias-cli/issues"
+  },
+  "homepage": "https://github.com/laabroms/alias-cli#readme",
   "dependencies": {
     "ink": "^6.8.0",
     "ink-select-input": "^6.2.0",
@@ -23,7 +45,12 @@
   "devDependencies": {
     "@types/node": "^25.3.0",
     "@types/react": "^19.2.14",
+    "esbuild": "^0.27.3",
+    "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
