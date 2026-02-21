@@ -10,8 +10,9 @@ import { AliasList } from './components/AliasList.js';
 import { AddAliasModal } from './components/AddAliasModal.js';
 import { EditAliasModal } from './components/EditAliasModal.js';
 import { DeleteConfirmModal } from './components/DeleteConfirmModal.js';
+import { SearchModal } from './components/SearchModal.js';
 
-type Mode = 'list' | 'add' | 'edit' | 'delete';
+type Mode = 'list' | 'add' | 'edit' | 'delete' | 'search';
 
 export function App() {
   const { exit } = useApp();
@@ -47,6 +48,12 @@ export function App() {
       setMode('edit');
     } else if ((input === 'd' || key.delete) && filteredAliases.length > 0) {
       setMode('delete');
+    } else if (input === '/') {
+      setMode('search');
+    } else if (input === 'c' && searchQuery) {
+      // Clear search
+      setSearchQuery('');
+      setSelectedIndex(0);
     } else if (input === 'q') {
       if (hasChanges) {
         const configPath = getShellConfigPath();
@@ -107,6 +114,17 @@ export function App() {
     setMode('list');
   };
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setSelectedIndex(0);
+    setMode('list');
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery('');
+    setMode('list');
+  };
+
   return (
     <Box flexDirection="column" paddingX={2} paddingY={1}>
       {/* Logo - big on main screen, compact in modals */}
@@ -164,6 +182,10 @@ export function App() {
             onCancel={handleCancel}
           />
         )}
+
+        {mode === 'search' && (
+          <SearchModal onSearch={handleSearch} onCancel={handleCancel} />
+        )}
       </Box>
 
       {/* Footer */}
@@ -185,12 +207,29 @@ export function App() {
               <Text bold color="red">[d/Del]</Text>
               <Text dimColor> delete</Text>
             </Text>
+            <Text>
+              <Text bold color="cyan">[/]</Text>
+              <Text dimColor> search</Text>
+            </Text>
+            {searchQuery && (
+              <Text>
+                <Text bold color="yellow">[c]</Text>
+                <Text dimColor> clear</Text>
+              </Text>
+            )}
             <Text dimColor>•</Text>
             <Text>
               <Text bold color="gray">[↑/↓]</Text>
               <Text dimColor> navigate</Text>
             </Text>
           </Box>
+          {searchQuery && (
+            <Box marginTop={1} justifyContent="center">
+              <Text dimColor>Filtering: </Text>
+              <Text color="cyan">"{searchQuery}"</Text>
+              <Text dimColor> ({filteredAliases.length} matches)</Text>
+            </Box>
+          )}
         </>
       )}
     </Box>
