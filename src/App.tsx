@@ -77,26 +77,37 @@ export function App() {
   };
 
   return (
-    <Box flexDirection="column" padding={1}>
-      <Box borderStyle="round" borderColor="cyan" flexDirection="column" padding={1}>
-        <Box justifyContent="space-between" paddingX={1}>
-          <Text bold color="cyan">
-            Alias Manager
-          </Text>
-          <Text dimColor>[q] Quit</Text>
+    <Box flexDirection="column" paddingX={2} paddingY={1}>
+      {/* Header */}
+      <Box justifyContent="space-between" marginBottom={1}>
+        <Box gap={1}>
+          <Text bold color="magenta">⚡</Text>
+          <Text bold color="white">Alias Manager</Text>
+          <Text dimColor>({aliases.length} aliases)</Text>
         </Box>
+        <Text dimColor>[q] quit</Text>
+      </Box>
 
+      {/* Separator */}
+      <Box marginBottom={1}>
+        <Text color="gray">{'─'.repeat(80)}</Text>
+      </Box>
+
+      {/* Main Content */}
+      <Box
+        borderStyle="round"
+        borderColor="gray"
+        flexDirection="column"
+        paddingX={2}
+        paddingY={1}
+        minHeight={12}
+      >
         {mode === 'list' && (
           <>
             <AliasList
               aliases={filteredAliases}
               selectedIndex={selectedIndex}
             />
-            <Box marginTop={1} justifyContent="center" gap={2}>
-              <Text dimColor>[a] Add</Text>
-              <Text dimColor>[e] Edit</Text>
-              <Text dimColor>[d] Delete</Text>
-            </Box>
           </>
         )}
 
@@ -120,6 +131,34 @@ export function App() {
           />
         )}
       </Box>
+
+      {/* Footer */}
+      {mode === 'list' && (
+        <>
+          <Box marginTop={1}>
+            <Text color="gray">{'─'.repeat(80)}</Text>
+          </Box>
+          <Box marginTop={1} justifyContent="center" gap={3}>
+            <Text>
+              <Text bold color="green">[a]</Text>
+              <Text dimColor> add</Text>
+            </Text>
+            <Text>
+              <Text bold color="blue">[e]</Text>
+              <Text dimColor> edit</Text>
+            </Text>
+            <Text>
+              <Text bold color="red">[d]</Text>
+              <Text dimColor> delete</Text>
+            </Text>
+            <Text dimColor>•</Text>
+            <Text>
+              <Text bold color="gray">[↑/↓]</Text>
+              <Text dimColor> navigate</Text>
+            </Text>
+          </Box>
+        </>
+      )}
     </Box>
   );
 }

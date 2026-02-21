@@ -22,12 +22,21 @@ export function DeleteConfirmModal({
   });
 
   return (
-    <Box flexDirection="column" gap={1} padding={1}>
-      <Text bold color="red">
-        Delete Alias
-      </Text>
+    <Box flexDirection="column" gap={1} alignItems="center">
+      {/* Title */}
+      <Box marginBottom={1}>
+        <Text bold color="red">⚠️  Delete Alias</Text>
+      </Box>
 
-      <Box flexDirection="column" marginY={1}>
+      {/* Warning */}
+      <Box
+        borderStyle="round"
+        borderColor="red"
+        paddingX={2}
+        paddingY={1}
+        flexDirection="column"
+        alignItems="center"
+      >
         <Text>
           Are you sure you want to delete{' '}
           <Text bold color="cyan">
@@ -35,13 +44,31 @@ export function DeleteConfirmModal({
           </Text>
           ?
         </Text>
-        <Text dimColor>Command: {alias.command}</Text>
+        <Box marginTop={1} flexDirection="column" alignItems="center">
+          <Text dimColor>Command:</Text>
+          <Text color="gray">"{alias.command}"</Text>
+        </Box>
       </Box>
 
-      <Box gap={2} justifyContent="center">
-        <Text color="red">[y] Yes</Text>
-        <Text dimColor>[n] No</Text>
-        <Text dimColor>[Esc] Cancel</Text>
+      {/* Warning note */}
+      <Box marginTop={1}>
+        <Text dimColor italic>This action cannot be undone</Text>
+      </Box>
+
+      {/* Actions */}
+      <Box marginTop={1} gap={3}>
+        <Text>
+          <Text bold color="red">[y]</Text>
+          <Text dimColor> yes, delete</Text>
+        </Text>
+        <Text>
+          <Text bold color="green">[n]</Text>
+          <Text dimColor> no, cancel</Text>
+        </Text>
+        <Text>
+          <Text bold color="gray">[Esc]</Text>
+          <Text dimColor> cancel</Text>
+        </Text>
       </Box>
     </Box>
   );

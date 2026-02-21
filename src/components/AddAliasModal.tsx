@@ -22,40 +22,92 @@ export function AddAliasModal({ onSave, onCancel }: AddAliasModalProps) {
     }
   });
 
+  const isFocusedName = focusedField === 'name';
+  const isFocusedCommand = focusedField === 'command';
+
   return (
-    <Box flexDirection="column" gap={1} padding={1}>
-      <Text bold color="cyan">
-        Add New Alias
-      </Text>
+    <Box flexDirection="column" gap={1}>
+      {/* Title */}
+      <Box marginBottom={1}>
+        <Text bold color="green">➕ Add New Alias</Text>
+      </Box>
 
-      <Box gap={1}>
-        <Text color={focusedField === 'name' ? 'cyan' : 'gray'}>Name:</Text>
-        <Box width={30}>
-          {focusedField === 'name' ? (
-            <TextInput value={name} onChange={setName} />
+      {/* Name Field */}
+      <Box flexDirection="column">
+        <Box marginBottom={0}>
+          <Text bold color={isFocusedName ? 'cyan' : 'gray'}>
+            {isFocusedName && '▶ '}Name:
+          </Text>
+        </Box>
+        <Box
+          borderStyle="round"
+          borderColor={isFocusedName ? 'cyan' : 'gray'}
+          paddingX={1}
+          width={50}
+        >
+          {isFocusedName ? (
+            <TextInput value={name} onChange={setName} placeholder="e.g., gc" />
           ) : (
-            <Text>{name || '_'}</Text>
+            <Text color={name ? 'white' : 'gray'}>
+              {name || 'e.g., gc'}
+            </Text>
           )}
         </Box>
       </Box>
 
-      <Box gap={1}>
-        <Text color={focusedField === 'command' ? 'cyan' : 'gray'}>
-          Command:
+      {/* Command Field */}
+      <Box flexDirection="column">
+        <Box marginBottom={0}>
+          <Text bold color={isFocusedCommand ? 'cyan' : 'gray'}>
+            {isFocusedCommand && '▶ '}Command:
+          </Text>
+        </Box>
+        <Box
+          borderStyle="round"
+          borderColor={isFocusedCommand ? 'cyan' : 'gray'}
+          paddingX={1}
+          width={50}
+        >
+          {isFocusedCommand ? (
+            <TextInput
+              value={command}
+              onChange={setCommand}
+              placeholder="e.g., git add . && git commit -m"
+            />
+          ) : (
+            <Text color={command ? 'white' : 'gray'}>
+              {command || 'e.g., git add . && git commit -m'}
+            </Text>
+          )}
+        </Box>
+      </Box>
+
+      {/* Preview */}
+      {name && command && (
+        <Box marginTop={1} flexDirection="column">
+          <Text dimColor>Preview:</Text>
+          <Box paddingX={2}>
+            <Text color="cyan">{name}</Text>
+            <Text color="gray"> = </Text>
+            <Text color="green">"{command}"</Text>
+          </Box>
+        </Box>
+      )}
+
+      {/* Footer */}
+      <Box marginTop={1} justifyContent="center" gap={2}>
+        <Text>
+          <Text bold color="cyan">[Tab]</Text>
+          <Text dimColor> switch</Text>
         </Text>
-        <Box width={30}>
-          {focusedField === 'command' ? (
-            <TextInput value={command} onChange={setCommand} />
-          ) : (
-            <Text>{command || '_'}</Text>
-          )}
-        </Box>
-      </Box>
-
-      <Box marginTop={1} gap={2} justifyContent="center">
-        <Text dimColor>[Tab] Switch field</Text>
-        <Text dimColor>[Enter] Save</Text>
-        <Text dimColor>[Esc] Cancel</Text>
+        <Text>
+          <Text bold color="green">[Enter]</Text>
+          <Text dimColor> save</Text>
+        </Text>
+        <Text>
+          <Text bold color="gray">[Esc]</Text>
+          <Text dimColor> cancel</Text>
+        </Text>
       </Box>
     </Box>
   );
