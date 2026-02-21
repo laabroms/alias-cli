@@ -51,7 +51,7 @@ export function App() {
       );
     } else if (input === "a") {
       setMode("add");
-    } else if (input === "e" && filteredAliases.length > 0) {
+    } else if ((input === "e" || key.return) && filteredAliases.length > 0) {
       setMode("edit");
     } else if ((input === "d" || key.delete) && filteredAliases.length > 0) {
       setMode("delete");
@@ -65,26 +65,47 @@ export function App() {
         const fileName = configPath.replace(os.homedir(), "~");
         const sourceCommand = `source ${fileName}`;
 
+        // Check if auto-reload wrapper is already installed
+        const configContent = fs.readFileSync(configPath, "utf-8");
+        const hasAutoReload =
+          configContent.includes("alias-cli()") &&
+          configContent.includes("command alias-cli");
+
         exit();
 
         // Print reload instructions
         console.log("\n\x1b[32;1m✨ Changes saved!\x1b[0m\n");
-        console.log("\x1b[2m📋 To apply your aliases:\x1b[0m");
-        console.log(`\x1b[7;36;1m ${sourceCommand} \x1b[0m\n`);
 
-        // Try to copy to clipboard (macOS/Linux)
-        try {
-          const { execSync } = require("child_process");
-          // Try pbcopy (macOS) first, then xclip (Linux)
+        if (hasAutoReload) {
+          console.log(
+            "\x1b[2;32m⚡ Auto-reload is set up! Your aliases are now applied.\x1b[0m\n",
+          );
+        } else {
+          console.log("\x1b[2m📋 To apply your aliases, run:\x1b[0m");
+          console.log(`\x1b[7;36;1m ${sourceCommand} \x1b[0m\n`);
+
+          // Try to copy to clipboard (macOS/Linux)
           try {
-            execSync(`echo '${sourceCommand}' | pbcopy`, { stdio: "ignore" });
-            console.log("\x1b[2;32m✓ Copied to clipboard!\x1b[0m\n");
+            const { execSync } = require("child_process");
+            try {
+              execSync(`echo '${sourceCommand}' | pbcopy`, { stdio: "ignore" });
+              console.log("\x1b[2;32m✓ Copied to clipboard!\x1b[0m\n");
+            } catch {
+              execSync(`echo '${sourceCommand}' | xclip -selection clipboard`, {
+                stdio: "ignore",
+              });
+              console.log("\x1b[2;32m✓ Copied to clipboard!\x1b[0m\n");
+            }
           } catch {
-            execSync(`echo '${sourceCommand}' | xclip -selection clipboard`, { stdio: "ignore" });
-            console.log("\x1b[2;32m✓ Copied to clipboard!\x1b[0m\n");
+            // Clipboard not available
           }
-        } catch {
-          // Clipboard not available
+
+          console.log(
+            "\x1b[2m⚡ Want aliases to auto-reload when you quit? Run this once:\x1b[0m\n",
+          );
+          console.log(
+            `\x1b[7;36m echo '\\nalias-cli() { command alias-cli; ${sourceCommand}; }' >> ${fileName} && ${sourceCommand} \x1b[0m\n`,
+          );
         }
       } else {
         exit();
@@ -147,14 +168,16 @@ export function App() {
   }, [setSearchQuery, setMode]);
 
   const handleNavigate = useCallback(
-    (direction: 'up' | 'down') => {
-      if (direction === 'up') {
+    (direction: "up" | "down") => {
+      if (direction === "up") {
         setSelectedIndex((prev) => Math.max(0, prev - 1));
       } else {
-        setSelectedIndex((prev) => Math.min(filteredAliases.length - 1, prev + 1));
+        setSelectedIndex((prev) =>
+          Math.min(filteredAliases.length - 1, prev + 1),
+        );
       }
     },
-    [filteredAliases.length]
+    [filteredAliases.length],
   );
 
   const handleSelectFromSearch = useCallback(() => {
@@ -220,7 +243,13 @@ export function App() {
                 />
               );
             case "add":
-              return <AddAliasModal onSave={handleAdd} onCancel={handleCancel} existingAliases={aliases} />;
+              return (
+                <AddAliasModal
+                  onSave={handleAdd}
+                  onCancel={handleCancel}
+                  existingAliases={aliases}
+                />
+              );
             case "edit":
               return filteredAliases[selectedIndex] ? (
                 <EditAliasModal

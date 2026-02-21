@@ -80,18 +80,10 @@ export function saveAliases(aliases: Alias[]): void {
     const lines = content.split('\n');
     const MARKER = '# Aliases managed by alias-cli';
 
-    // Remove old alias lines and the marker, but keep the wrapper function
+    // Remove old alias lines and the marker (function definitions are safe - they don't start with 'alias ')
     const filteredLines = lines.filter((line) => {
       const trimmed = line.trim();
-      // Keep the wrapper function lines
-      if (trimmed.includes('alias-cli-reload()') ||
-          trimmed.includes('command alias-cli') ||
-          trimmed.includes('~/.alias-cli-reload') ||
-          (trimmed.startsWith('alias alias-cli=') && trimmed.includes('alias-cli-reload'))) {
-        return true;
-      }
-      // Remove old aliases and markers
-      return !trimmed.startsWith('alias ') && trimmed !== MARKER && trimmed !== '# End of alias-cli managed aliases';
+      return !trimmed.startsWith('alias ') && trimmed !== MARKER;
     });
 
     // Add new aliases at the end
