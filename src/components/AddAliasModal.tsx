@@ -13,8 +13,10 @@ export function AddAliasModal({ onSave, onCancel }: AddAliasModalProps) {
   const [focusedField, setFocusedField] = useState<'name' | 'command'>('name');
 
   useInput((input, key) => {
-    if (key.tab) {
+    if (key.tab || key.downArrow) {
       setFocusedField((prev) => (prev === 'name' ? 'command' : 'name'));
+    } else if (key.upArrow) {
+      setFocusedField((prev) => (prev === 'command' ? 'name' : 'command'));
     } else if (key.escape) {
       onCancel();
     } else if (key.return && name && command) {
@@ -97,7 +99,7 @@ export function AddAliasModal({ onSave, onCancel }: AddAliasModalProps) {
       {/* Footer */}
       <Box marginTop={1} justifyContent="center" gap={2}>
         <Text>
-          <Text bold color="cyan">[Tab]</Text>
+          <Text bold color="cyan">[↑/↓]</Text>
           <Text dimColor> switch</Text>
         </Text>
         <Text>

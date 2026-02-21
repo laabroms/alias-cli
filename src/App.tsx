@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, useInput } from 'ink';
-import { loadAliases, saveAliases, type Alias } from './aliases.js';
+import { Box, Text, useInput, useApp } from 'ink';
+import { loadAliases, saveAliases, type Alias, getShellConfigPath } from './aliases.js';
 import { Logo } from './components/Logo.js';
+import { LogoCompact } from './components/LogoCompact.js';
 import { AliasList } from './components/AliasList.js';
 import { AddAliasModal } from './components/AddAliasModal.js';
 import { EditAliasModal } from './components/EditAliasModal.js';
@@ -10,10 +11,12 @@ import { DeleteConfirmModal } from './components/DeleteConfirmModal.js';
 type Mode = 'list' | 'add' | 'edit' | 'delete';
 
 export function App() {
+  const { exit } = useApp();
   const [aliases, setAliases] = useState<Alias[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [mode, setMode] = useState<Mode>('list');
   const [searchQuery, setSearchQuery] = useState('');
+  const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
     const loaded = loadAliases();
@@ -42,7 +45,16 @@ export function App() {
     } else if (input === 'd' && filteredAliases.length > 0) {
       setMode('delete');
     } else if (input === 'q') {
-      process.exit(0);
+      if (hasChanges) {
+        const configPath = getShellConfigPath();
+        console.log('\n');
+        console.log('✨ Changes saved!');
+        console.log('');
+        console.log('To apply your new aliases, run:');
+        console.log(`  \x1b[36msource ${configPath}\x1b[0m`);
+        console.log('');
+      }
+      exit();
     }
   });
 
@@ -51,6 +63,7 @@ export function App() {
     const updated = [...aliases, newAlias];
     setAliases(updated);
     saveAliases(updated);
+    setHasChanges(true);
     setMode('list');
   };
 
@@ -61,6 +74,7 @@ export function App() {
     );
     setAliases(updated);
     saveAliases(updated);
+    setHasChanges(true);
     setMode('list');
   };
 
@@ -69,6 +83,7 @@ export function App() {
     const updated = aliases.filter((a) => a.name !== selected.name);
     setAliases(updated);
     saveAliases(updated);
+    setHasChanges(true);
     setSelectedIndex(Math.max(0, selectedIndex - 1));
     setMode('list');
   };
@@ -79,8 +94,8 @@ export function App() {
 
   return (
     <Box flexDirection="column" paddingX={2} paddingY={1}>
-      {/* Logo - only show on main screen */}
-      {mode === 'list' && <Logo />}
+      {/* Logo - big on main screen, compact in modals */}
+      {mode === 'list' ? <Logo /> : <LogoCompact />}
 
       {/* Header */}
       <Box justifyContent="space-between" marginBottom={1}>

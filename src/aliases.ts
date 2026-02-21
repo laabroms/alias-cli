@@ -9,7 +9,7 @@ export interface Alias {
 
 const SHELL_CONFIG_FILES = ['.zshrc', '.bashrc'];
 
-function getShellConfigPath(): string {
+export function getShellConfigPath(): string {
   const homeDir = os.homedir();
   
   // Check which shell config exists
