@@ -42,7 +42,7 @@ export function App() {
       setMode('add');
     } else if (input === 'e' && filteredAliases.length > 0) {
       setMode('edit');
-    } else if (input === 'd' && filteredAliases.length > 0) {
+    } else if ((input === 'd' || key.delete) && filteredAliases.length > 0) {
       setMode('delete');
     } else if (input === 'q') {
       if (hasChanges) {
@@ -167,7 +167,7 @@ export function App() {
               <Text dimColor> edit</Text>
             </Text>
             <Text>
-              <Text bold color="red">[d]</Text>
+              <Text bold color="red">[d/Del]</Text>
               <Text dimColor> delete</Text>
             </Text>
             <Text dimColor>•</Text>
