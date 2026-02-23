@@ -12,6 +12,7 @@
 > Interactive terminal UI for managing shell aliases
 
 [![npm version](https://img.shields.io/npm/v/@laabroms/alias-cli.svg)](https://www.npmjs.com/package/@laabroms/alias-cli)
+[![GitHub](https://img.shields.io/github/stars/laabroms/alias-cli?style=social)](https://github.com/laabroms/alias-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Demo
